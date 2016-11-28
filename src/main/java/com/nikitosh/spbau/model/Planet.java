@@ -31,22 +31,27 @@ public class Planet implements ObjectInstance, State {
         this.name = name;
     }
 
+    @Override
     public String className() {
         return CLASS_NAME;
     }
 
+    @Override
     public String name() {
         return name;
     }
 
-    public ObjectInstance copyWithName(String newName) {
+    @Override
+    public Planet copyWithName(String newName) {
         return new Planet(x, y, spaceshipsNumber, newName);
     }
 
+    @Override
     public List<Object> variableKeys() {
         return keys;
     }
 
+    @Override
     public Object get(Object variableKey) {
         if (variableKey.equals(Vars.X)) {
             return x;
@@ -60,11 +65,24 @@ public class Planet implements ObjectInstance, State {
         throw new UnknownKeyException(variableKey);
     }
 
-    public State copy() {
+    @Override
+    public Planet copy() {
         return new Planet(x, y, spaceshipsNumber, name);
     }
 
     public void onTick() {
         spaceshipsNumber++;
+    }
+
+    public int getSpaceshipsNumber() {
+        return spaceshipsNumber;
+    }
+
+    public void increaseSpaceshipsNumber(int increment) {
+        spaceshipsNumber += increment;
+    }
+
+    public void setSpaceshipsNumber(int spaceshipsNumber) {
+        this.spaceshipsNumber = spaceshipsNumber;
     }
 }

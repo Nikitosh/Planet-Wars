@@ -51,4 +51,19 @@ public class GameState implements OOState {
     public List<ObjectInstance> objectsOfClass(String objectName) {
         return objects().stream().filter((object) -> object.className().equals(objectName)).collect(Collectors.toList());
     }
+
+    public Agent touchAgent() {
+        agent = agent.copy();
+        return agent;
+    }
+
+    public Agent touchOpponent() {
+        opponent = opponent.copy();
+        return agent;
+    }
+
+    public Agent touchNeutral() {
+        neutral = neutral.copy();
+        return neutral;
+    }
 }
