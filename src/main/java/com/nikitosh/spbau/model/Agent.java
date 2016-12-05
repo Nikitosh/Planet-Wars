@@ -1,22 +1,23 @@
 package com.nikitosh.spbau.model;
 
-import burlap.mdp.core.oo.state.*;
+import burlap.mdp.core.oo.state.ObjectInstance;
 import burlap.mdp.core.state.*;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.util.*;
-import java.util.stream.*;
+import java.util.stream.Collectors;
 
 public class Agent implements ObjectInstance, State {
-    public static final String CLASS_NAME = "Agent";
+    public static final String CLASS_NAME = "AGENT_CLASS";
 
     private List<Planet> planets;
     private String name;
 
     private static class Vars {
-        private static final String PLANETS = "planets";
+        private static final String PLANETS = "PLANETS";
     };
 
-    private static final List<Object> keys = Arrays.<Object>asList(Vars.PLANETS);
+    private static final List<Object> KEYS = Arrays.<Object>asList(Vars.PLANETS);
 
     public Agent(List<Planet> planets, String name) {
         this.planets = planets;
@@ -35,12 +36,12 @@ public class Agent implements ObjectInstance, State {
 
     @Override
     public Agent copyWithName(String newName) {
-        return new Agent(planets.stream().map((planet) -> (Planet) planet.copy()).collect(Collectors.toList()), newName);
+        return new Agent(planets.stream().map(Planet::copy).collect(Collectors.toList()), newName);
     }
 
     @Override
     public List<Object> variableKeys() {
-        return keys;
+        return KEYS;
     }
 
     @Override
@@ -71,5 +72,19 @@ public class Agent implements ObjectInstance, State {
             throw new RuntimeException("Planet is already in list");
         }
         planets.add(planet);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Agent)) {
+            return false;
+        }
+        Agent agent = (Agent) obj;
+        return CollectionUtils.isEqualCollection(planets, agent.planets);
+    }
+
+    @Override
+    public int hashCode() {
+        return planets.hashCode();
     }
 }
