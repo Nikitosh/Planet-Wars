@@ -9,7 +9,9 @@ import java.util.*;
 
 @DeepCopyState
 public class Planet implements ObjectInstance, State {
-    public static final String CLASS_NAME = "Planet";
+    public static final int P = 239017;
+    public static final String CLASS_NAME = "PLANET_CLASS";
+    public static final int MAX_CAPACITY = 20;
 
     private int x;
     private int y;
@@ -17,12 +19,12 @@ public class Planet implements ObjectInstance, State {
     private String name;
 
     private static class Vars {
-        private static final String X = "x";
-        private static final String Y = "y";
-        private static final String SPACESHIPS_NUMBER = "spaceshipsNumber";
+        private static final String X = "X";
+        private static final String Y = "Y";
+        private static final String SPACESHIPS_NUMBER = "SPACESHIPS_NUMBER";
     };
 
-    private static final List<Object> keys = Arrays.<Object>asList(Vars.X, Vars.Y, Vars.SPACESHIPS_NUMBER);
+    private static final List<Object> KEYS = Arrays.<Object>asList(Vars.X, Vars.Y, Vars.SPACESHIPS_NUMBER);
 
     public Planet(int x, int y, int spaceshipsNumber, String name) {
         this.x = x;
@@ -48,7 +50,7 @@ public class Planet implements ObjectInstance, State {
 
     @Override
     public List<Object> variableKeys() {
-        return keys;
+        return KEYS;
     }
 
     @Override
@@ -78,11 +80,37 @@ public class Planet implements ObjectInstance, State {
         return spaceshipsNumber;
     }
 
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
     public void increaseSpaceshipsNumber(int increment) {
         spaceshipsNumber += increment;
     }
 
     public void setSpaceshipsNumber(int spaceshipsNumber) {
         this.spaceshipsNumber = spaceshipsNumber;
+    }
+
+    public void normalize() {
+        spaceshipsNumber = Math.min(spaceshipsNumber, MAX_CAPACITY);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Planet)) {
+            return false;
+        }
+        Planet planet = (Planet) obj;
+        return spaceshipsNumber == planet.spaceshipsNumber && name.equals(planet.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return spaceshipsNumber * P + name.hashCode();
     }
 }
