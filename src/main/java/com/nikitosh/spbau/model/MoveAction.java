@@ -3,37 +3,40 @@ package com.nikitosh.spbau.model;
 import burlap.mdp.core.action.Action;
 
 public class MoveAction implements Action {
-    private static final String ACTION_NAME = "Move";
-
-    private Planet source;
-    private Planet destination;
+    private String sourceName;
+    private String destinationName;
     private int spaceshipsNumber;
 
-    public MoveAction(Planet source, Planet destination, int spaceshipsNumber) {
-        this.source = source;
-        this.destination = destination;
+    public MoveAction(String sourceName, String destinationName, int spaceshipsNumber) {
+        this.sourceName = sourceName;
+        this.destinationName = destinationName;
         this.spaceshipsNumber = spaceshipsNumber;
     }
 
     @Override
     public String actionName() {
-        return ACTION_NAME;
+        return sourceName + " to " + destinationName + ": " + spaceshipsNumber;
     }
 
     @Override
     public Action copy() {
-        return new MoveAction(source, destination, spaceshipsNumber);
+        return new MoveAction(sourceName, destinationName, spaceshipsNumber);
     }
 
-    public Planet getSource() {
-        return source;
+    public String getSourceName() {
+        return sourceName;
     }
 
-    public Planet getDestination() {
-        return destination;
+    public String getDestinationName() {
+        return destinationName;
     }
 
     public int getSpaceshipsNumber() {
         return spaceshipsNumber;
+    }
+
+    @Override
+    public String toString() {
+        return actionName();
     }
 }

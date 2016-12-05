@@ -5,15 +5,15 @@ import burlap.mdp.core.action.Action;
 import burlap.mdp.core.oo.state.ObjectInstance;
 import burlap.mdp.core.state.State;
 import burlap.mdp.singleagent.model.statemodel.FullStateModel;
-import com.nikitosh.spbau.strategies.AIAgent;
+import com.nikitosh.spbau.strategies.Strategy;
 
 import java.util.List;
 
 public class GameModel implements FullStateModel {
-    private AIAgent opponentAgent;
+    private Strategy opponentStrategy;
 
-    public GameModel(AIAgent opponentAgent) {
-        this.opponentAgent = opponentAgent;
+    public GameModel(Strategy opponentAgent) {
+        this.opponentStrategy = opponentAgent;
     }
 
     @Override
@@ -23,18 +23,29 @@ public class GameModel implements FullStateModel {
 
     @Override
     public State sample(State state, Action action) {
+
         GameState gameState = (GameState) state.copy();
         gameState.touchNeutral();
-        processAction(gameState.touchAgent(), action, gameState);
-        processAction(gameState.touchOpponent(), opponentAgent.getAction(gameState), gameState);
+        Agent newAgent = gameState.touchAgent();
+        Agent newOpponent = gameState.touchOpponent();
+        Action opponentAction = opponentStrategy.getAction(gameState);
+        processActions(newAgent, newOpponent, action, opponentAction, gameState);
+        onTick(newAgent);
+        onTick(newOpponent);
         return gameState;
+    }
+
+    private void processActions(Agent agent, Agent opponent, Action action, Action opponentAction, GameState state) {
+        processAction(agent, action, state);
+        processAction(opponent, opponentAction, state);
     }
 
     private void processAction(Agent agent, Action action, GameState state) {
         MoveAction moveAction = (MoveAction) action;
         List<Planet> planets = agent.getPlanets();
-        Planet source = moveAction.getSource();
-        Planet destination = moveAction.getDestination();
+
+        Planet source = state.getPlanet(moveAction.getSourceName());
+        Planet destination = state.getPlanet(moveAction.getDestinationName());
         int spaceshipsNumber = moveAction.getSpaceshipsNumber();
         if (source.getSpaceshipsNumber() < spaceshipsNumber || planets.indexOf(source) == -1) {
             return;
@@ -44,7 +55,7 @@ public class GameModel implements FullStateModel {
             destination.increaseSpaceshipsNumber(spaceshipsNumber);
             return;
         }
-        if (destination.getSpaceshipsNumber() > spaceshipsNumber) {
+        if (destination.getSpaceshipsNumber() >= spaceshipsNumber) {
             destination.increaseSpaceshipsNumber(-spaceshipsNumber);
             return;
         }
@@ -56,5 +67,9 @@ public class GameModel implements FullStateModel {
                 agent.addPlanet(destination);
             }
         }
+    }
+
+    private void onTick(Agent agent) {
+        agent.getPlanets().stream().peek(Planet::onTick).forEach(Planet::normalize);
     }
 }
