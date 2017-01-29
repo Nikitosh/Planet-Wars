@@ -1,12 +1,13 @@
 package com.nikitosh.spbau.model;
 
-import burlap.mdp.auxiliary.DomainGenerator;
+import burlap.mdp.auxiliary.*;
 import burlap.mdp.core.action.*;
-import burlap.mdp.singleagent.model.FactoredModel;
-import burlap.mdp.singleagent.oo.OOSADomain;
+import burlap.mdp.core.state.*;
+import burlap.mdp.singleagent.model.*;
+import burlap.mdp.singleagent.oo.*;
 import com.nikitosh.spbau.strategies.*;
 
-import java.util.List;
+import java.util.*;
 
 public class GameDomainGenerator implements DomainGenerator {
     private List<Action> actions;
@@ -20,7 +21,13 @@ public class GameDomainGenerator implements DomainGenerator {
         OOSADomain domain = new OOSADomain();
         domain.addStateClass(Agent.CLASS_NAME, Agent.class)
                 .addStateClass(Planet.CLASS_NAME, Planet.class);
-        actions.forEach((action) -> domain.addActionType(new UniversalActionType(action)));
+        actions.forEach((action) -> domain.addActionType(new UniversalActionType(action) {
+            public List<Action> allApplicableActions(State s) {
+                GameState gameState = (GameState) s;
+                MoveAction moveAction = (MoveAction) action;
+                return gameState.isApplicable(moveAction) ? Collections.singletonList(action) : Collections.emptyList();
+            }
+        }));
 
         Strategy emptyStrategy = new EmptyStrategy();
         domain.setModel(new FactoredModel(new GameModel(emptyStrategy),
