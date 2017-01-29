@@ -29,6 +29,7 @@ public final class World {
             int owner = scanner.nextInt();
             Planet planet = new Planet(x, y, spaceshipsNumber, name);
             world.planets.get(owner).add(planet);
+            world.actions.add(new MoveAction(name, name, 0));
         }
 
         int connectionsNumber = scanner.nextInt();

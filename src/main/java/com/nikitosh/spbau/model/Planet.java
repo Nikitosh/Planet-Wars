@@ -88,6 +88,10 @@ public class Planet implements ObjectInstance, State {
         return y;
     }
 
+    public String getName() {
+        return name;
+    }
+
     public void increaseSpaceshipsNumber(int increment) {
         spaceshipsNumber += increment;
     }
