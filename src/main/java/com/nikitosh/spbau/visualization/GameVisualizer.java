@@ -1,10 +1,10 @@
 package com.nikitosh.spbau.visualization;
 
-import burlap.mdp.core.action.Action;
+import burlap.mdp.core.action.*;
 import burlap.visualizer.*;
-import com.nikitosh.spbau.model.Agent;
+import com.nikitosh.spbau.model.*;
 
-import java.util.List;
+import java.util.*;
 
 public class GameVisualizer {
     private List<Action> edges;
@@ -13,7 +13,7 @@ public class GameVisualizer {
         this.edges = edges;
     }
 
-    public StateRenderLayer getStateRenderLayer() {
+    private StateRenderLayer getStateRenderLayer() {
         StateRenderLayer renderLayer = new StateRenderLayer();
         renderLayer.addStatePainter(new GameStatePainter(edges));
 
@@ -25,6 +25,8 @@ public class GameVisualizer {
     }
 
     public Visualizer getVisualizer() {
-        return new Visualizer(getStateRenderLayer());
+        Visualizer visualizer = new Visualizer(getStateRenderLayer());
+        visualizer.setStateActionRenderLayer(new GameStateActionRenderLayer(), true);
+        return visualizer;
     }
 }
