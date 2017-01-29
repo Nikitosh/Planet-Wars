@@ -36,22 +36,23 @@ public class GameModel implements FullStateModel {
     }
 
     private void processActions(Agent agent, Agent opponent, Action action, Action opponentAction, GameState state) {
+        //TODO: process actions simultaneously.
         processAction(agent, action, state);
         processAction(opponent, opponentAction, state);
     }
 
     private void processAction(Agent agent, Action action, GameState state) {
+
         MoveAction moveAction = (MoveAction) action;
-        List<Planet> planets = agent.getPlanets();
 
         Planet source = state.getPlanet(moveAction.getSourceName());
         Planet destination = state.getPlanet(moveAction.getDestinationName());
         int spaceshipsNumber = moveAction.getSpaceshipsNumber();
-        if (source.getSpaceshipsNumber() < spaceshipsNumber || planets.indexOf(source) == -1) {
+        if (!state.isApplicable(moveAction)) {
             return;
         }
         source.increaseSpaceshipsNumber(-spaceshipsNumber);
-        if (planets.indexOf(destination) != -1) {
+        if (agent.getPlanets().indexOf(destination) != -1) {
             destination.increaseSpaceshipsNumber(spaceshipsNumber);
             return;
         }
@@ -65,6 +66,7 @@ public class GameModel implements FullStateModel {
                 anotherAgent.removePlanet(destination);
                 destination.setSpaceshipsNumber(spaceshipsNumber - destination.getSpaceshipsNumber());
                 agent.addPlanet(destination);
+                break;
             }
         }
     }
