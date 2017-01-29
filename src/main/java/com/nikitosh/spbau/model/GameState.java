@@ -106,4 +106,9 @@ public class GameState implements OOState, HashableState {
     public Agent getAgent() {
         return agent;
     }
+
+    public boolean isApplicable(MoveAction action) {
+        Planet source = getPlanet(action.getSourceName());
+        return source.getSpaceshipsNumber() >= action.getSpaceshipsNumber() && agent.getPlanets().indexOf(source) != -1;
+    }
 }
