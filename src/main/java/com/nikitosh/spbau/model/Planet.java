@@ -9,9 +9,9 @@ import java.util.*;
 
 @DeepCopyState
 public class Planet implements ObjectInstance, State {
-    public static final int P = 239017;
+    private static final int P = 239017;
     public static final String CLASS_NAME = "PLANET_CLASS";
-    public static final int MAX_CAPACITY = 20;
+    public static final int MAX_CAPACITY = 10;
 
     private int x;
     private int y;

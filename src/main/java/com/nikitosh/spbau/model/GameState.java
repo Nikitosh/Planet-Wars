@@ -8,11 +8,11 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public class GameState implements OOState, HashableState {
-    public static final int P = 239017;
+    private static final int P = 239017;
+    public static final int PLAYERS_NUMBER = 2;
     public static final String AGENT_NAME = "AGENT";
     public static final String OPPONENT_NAME = "OPPONENT";
     public static final String NEUTRAL_NAME = "NEUTRAL";
-    public static final int PLAYERS_NUMBER = 2;
 
     private Agent agent;
     private Agent opponent;
@@ -75,7 +75,7 @@ public class GameState implements OOState, HashableState {
         return opponent;
     }
 
-    public List<Planet> getAllPlanets() {
+    private List<Planet> getAllPlanets() {
         return objects().stream().flatMap(object -> ((Agent) object).getPlanets().stream())
                 .collect(Collectors.toList());
     }
@@ -107,8 +107,9 @@ public class GameState implements OOState, HashableState {
         return agent;
     }
 
-    public boolean isApplicable(MoveAction action) {
+    public boolean isApplicable(Agent currentAgent, MoveAction action) {
         Planet source = getPlanet(action.getSourceName());
-        return source.getSpaceshipsNumber() >= action.getSpaceshipsNumber() && agent.getPlanets().indexOf(source) != -1;
+        return source.getSpaceshipsNumber() >= action.getSpaceshipsNumber()
+                && currentAgent.getPlanets().indexOf(source) != -1;
     }
 }
