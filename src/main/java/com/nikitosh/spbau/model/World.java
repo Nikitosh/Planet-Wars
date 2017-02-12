@@ -9,6 +9,7 @@ import java.util.*;
 public final class World {
     private List<List<Planet>> planets = new ArrayList<>();
     private List<Action> actions = new ArrayList<>();
+    private List<Action> edges = new ArrayList<>();
 
     private World() {
         for (int i = 0; i < GameState.PLAYERS_NUMBER + 1; i++) {
@@ -36,6 +37,7 @@ public final class World {
         for (int i = 0; i < connectionsNumber; i++) {
             String name1 = scanner.next();
             String name2 = scanner.next();
+            world.edges.add(new MoveAction(name1, name2, 0));
             for (int j = 0; j <= Planet.MAX_CAPACITY; j++) {
                 world.actions.add(new MoveAction(name1, name2, j));
                 world.actions.add(new MoveAction(name2, name1, j));
@@ -52,5 +54,9 @@ public final class World {
 
     public List<Action> getActions() {
         return actions;
+    }
+
+    public List<Action> getEdges() {
+        return edges;
     }
 }
