@@ -35,6 +35,10 @@ public class MoveAction implements Action {
         return spaceshipsNumber;
     }
 
+    public void increaseSpaceshipsNumber(int increment) {
+        spaceshipsNumber += increment;
+    }
+
     @Override
     public String toString() {
         return actionName();
