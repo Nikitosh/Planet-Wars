@@ -36,22 +36,31 @@ public class GameModel implements FullStateModel {
     }
 
     private void processActions(Agent agent, Agent opponent, Action action, Action opponentAction, GameState state) {
-        //TODO: process actions simultaneously.
-        processAction(agent, action, state);
-        processAction(opponent, opponentAction, state);
+        MoveAction moveAction = (MoveAction) action;
+        MoveAction moveOpponentAction = (MoveAction) opponentAction;
+        if (!state.isApplicable(agent, moveAction)) {
+            throw new RuntimeException("Agent action " + moveAction + " can't be applied to current state");
+        }
+        if (!state.isApplicable(opponent, moveOpponentAction)) {
+            throw new RuntimeException("Opponent action " + moveOpponentAction + " can't be applied to current state");
+        }
+        state.getPlanet(moveAction.getSourceName()).increaseSpaceshipsNumber(-moveAction.getSpaceshipsNumber());
+        state.getPlanet(moveOpponentAction.getSourceName())
+                .increaseSpaceshipsNumber(-moveOpponentAction.getSpaceshipsNumber());
+        System.out.println(moveOpponentAction.getSpaceshipsNumber());
+        if (moveAction.getDestinationName().equals(moveOpponentAction.getDestinationName())) {
+            int minimumSpaceshipsNumber = Math.min(moveAction.getSpaceshipsNumber(),
+                    moveOpponentAction.getSpaceshipsNumber());
+            moveAction.increaseSpaceshipsNumber(-minimumSpaceshipsNumber);
+            moveOpponentAction.increaseSpaceshipsNumber(-minimumSpaceshipsNumber);
+        }
+        processAction(agent, moveAction, state);
+        processAction(opponent, moveOpponentAction, state);
     }
 
-    private void processAction(Agent agent, Action action, GameState state) {
-
-        MoveAction moveAction = (MoveAction) action;
-
-        Planet source = state.getPlanet(moveAction.getSourceName());
-        Planet destination = state.getPlanet(moveAction.getDestinationName());
-        int spaceshipsNumber = moveAction.getSpaceshipsNumber();
-        if (!state.isApplicable(moveAction)) {
-            return;
-        }
-        source.increaseSpaceshipsNumber(-spaceshipsNumber);
+    private void processAction(Agent agent, MoveAction action, GameState state) {
+        Planet destination = state.getPlanet(action.getDestinationName());
+        int spaceshipsNumber = action.getSpaceshipsNumber();
         if (agent.getPlanets().indexOf(destination) != -1) {
             destination.increaseSpaceshipsNumber(spaceshipsNumber);
             return;

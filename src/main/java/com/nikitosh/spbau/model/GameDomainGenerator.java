@@ -25,7 +25,8 @@ public class GameDomainGenerator implements DomainGenerator {
             public List<Action> allApplicableActions(State s) {
                 GameState gameState = (GameState) s;
                 MoveAction moveAction = (MoveAction) action;
-                return gameState.isApplicable(moveAction) ? Collections.singletonList(action) : Collections.emptyList();
+                return gameState.isApplicable(gameState.getAgent(), moveAction)
+                        ? Collections.singletonList(action) : Collections.emptyList();
             }
         }));
 
