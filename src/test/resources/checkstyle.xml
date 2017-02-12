@@ -161,7 +161,13 @@
         <!--<module name="FinalParameters"/>-->
         <module name="TodoComment"/>
         <module name="UpperEll"/>
+        <module name="FileContentsHolder"/>
 
+    </module>
+    <module name="SuppressionCommentFilter">
+        <property name="offCommentFormat" value="CheckStyle\:OFF\: ([\w\|]+)"/>
+        <property name="onCommentFormat" value="CheckStyle\:ON\: ([\w\|]+)"/>
+        <property name="checkFormat" value="$1"/>
     </module>
 
 </module>
