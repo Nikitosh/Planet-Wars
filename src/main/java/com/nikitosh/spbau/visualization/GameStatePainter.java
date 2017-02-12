@@ -9,6 +9,10 @@ import java.awt.*;
 import java.util.List;
 
 public class GameStatePainter implements StatePainter {
+    private static final float OPAQUE_LINE_LENGTH = 10;
+    private static final float TRANSPARENT_LINE_LENGTH = 40;
+    private static final float WIDTH = 3;
+
     private List<Action> edges;
 
     public GameStatePainter(List<Action> edges) {
@@ -27,9 +31,9 @@ public class GameStatePainter implements StatePainter {
     }
 
     private void drawDashedLine(Graphics2D graphics2D, int x1, int y1, int x2, int y2) {
-        float[] dashPattern = {2.0f, 5.0f};
+        float[] dashPattern = {OPAQUE_LINE_LENGTH, TRANSPARENT_LINE_LENGTH};
         Stroke stroke = graphics2D.getStroke();
-        graphics2D.setStroke(new BasicStroke(3.0f, BasicStroke.CAP_ROUND, BasicStroke.JOIN_MITER, 10.0f,
+        graphics2D.setStroke(new BasicStroke(WIDTH, BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL, 0,
                 dashPattern, 0));
         graphics2D.setColor(Color.BLACK);
         graphics2D.drawLine(x1, y1, x2, y2);

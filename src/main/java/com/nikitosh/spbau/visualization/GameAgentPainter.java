@@ -8,6 +8,8 @@ import java.awt.*;
 import java.util.*;
 
 public class GameAgentPainter implements ObjectPainter {
+    private static final int PLANET_SCALE = 5;
+
     private static final Map<String, Color> COLORS = new HashMap<String, Color>() {{
         put(GameState.NEUTRAL_NAME, Color.YELLOW);
         put(GameState.AGENT_NAME, Color.GREEN);
@@ -22,9 +24,10 @@ public class GameAgentPainter implements ObjectPainter {
         graphics2D.setColor(color);
 
         agent.getPlanets().forEach(planet -> {
-            int radius = 3 * planet.getSpaceshipsNumber();
+            int radius = PLANET_SCALE * planet.getSpaceshipsNumber();
             graphics2D.fillOval(planet.getX() - radius / 2, planet.getY() - radius / 2, radius, radius);
-            VisualizationUtilities.drawCenteredString(graphics2D, String.valueOf(planet.getSpaceshipsNumber()), planet.getX(), planet.getY(), Color.BLACK);
+            VisualizationUtilities.drawCenteredString(graphics2D, String.valueOf(planet.getSpaceshipsNumber()),
+                    planet.getX(), planet.getY(), Color.BLACK);
         });
     }
 }

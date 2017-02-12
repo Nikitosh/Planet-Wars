@@ -11,11 +11,16 @@ import java.awt.image.*;
 import java.io.*;
 
 public class GameStateActionRenderLayer extends StateActionRenderLayer {
+    private static final String SPACESHIP_IMAGE_PATH = "src/test/resources/spaceship.png";
+    private static final int SPACESHIP_IMAGE_WIDTH = 40;
+    private static final int SPACESHIP_IMAGE_HEIGHT = 40;
+    private static final int SPACESHIP_OFFSET = 30;
+
     private BufferedImage spaceshipImage;
 
     public GameStateActionRenderLayer() {
         try {
-            spaceshipImage = ImageIO.read(new File("src/test/resources/spaceship.png"));
+            spaceshipImage = ImageIO.read(new File(SPACESHIP_IMAGE_PATH));
         } catch (IOException exception) {
             System.err.println("Could not load image of spaceship");
         }
@@ -32,9 +37,10 @@ public class GameStateActionRenderLayer extends StateActionRenderLayer {
             int spaceshipY = (planet1.getY() + planet2.getY()) / 2;
             double angle = Math.atan2(planet2.getY() - planet1.getY(), planet2.getX() - planet1.getX());
             VisualizationUtilities.drawRotatedImage(graphics2D, spaceshipImage,
-                    spaceshipX - 15, spaceshipY - 15, 30, 30, angle);
+                    spaceshipX - SPACESHIP_IMAGE_WIDTH / 2, spaceshipY - SPACESHIP_IMAGE_HEIGHT / 2,
+                    SPACESHIP_IMAGE_WIDTH, SPACESHIP_IMAGE_HEIGHT, angle);
             VisualizationUtilities.drawCenteredString(graphics2D, String.valueOf(moveAction.getSpaceshipsNumber()),
-                    spaceshipX, spaceshipY - 20, Color.BLACK);
+                    spaceshipX, spaceshipY - SPACESHIP_OFFSET, Color.BLACK);
         }
     }
 }
