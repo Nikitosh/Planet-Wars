@@ -103,8 +103,16 @@ public class GameState implements OOState, HashableState {
         return this;
     }
 
+    public Agent getNeutral() {
+        return neutral;
+    }
+
     public Agent getAgent() {
         return agent;
+    }
+
+    public Agent getOpponent() {
+        return opponent;
     }
 
     public boolean isApplicable(Agent currentAgent, MoveAction action) {

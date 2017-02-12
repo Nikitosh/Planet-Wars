@@ -16,7 +16,7 @@ public class GameTerminalFunctionTest {
         GameState state = new GameState(TestUtilities.generateAgent(GameState.NEUTRAL_NAME, Arrays.asList(2, 3, 1, 5)),
                 TestUtilities.generateAgent(GameState.AGENT_NAME, Arrays.asList(3, 9, 8, 1)),
                 TestUtilities.generateAgent(GameState.OPPONENT_NAME, Arrays.asList(1, 3)));
-        assertEquals(false, (new GameTerminalFunction()).isTerminal(state));
+        assertEquals(false, new GameTerminalFunction().isTerminal(state));
     }
 
     @Test
@@ -24,7 +24,7 @@ public class GameTerminalFunctionTest {
         GameState state = new GameState(TestUtilities.generateAgent(GameState.NEUTRAL_NAME, Arrays.asList(2, 1)),
                 TestUtilities.generateAgent(GameState.AGENT_NAME, Arrays.asList(3, 9, 8, 1)),
                 TestUtilities.generateAgent(GameState.OPPONENT_NAME, Collections.emptyList()));
-        assertEquals(true, (new GameTerminalFunction()).isTerminal(state));
+        assertEquals(true, new GameTerminalFunction().isTerminal(state));
     }
 }
 

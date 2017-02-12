@@ -47,7 +47,6 @@ public class GameModel implements FullStateModel {
         state.getPlanet(moveAction.getSourceName()).increaseSpaceshipsNumber(-moveAction.getSpaceshipsNumber());
         state.getPlanet(moveOpponentAction.getSourceName())
                 .increaseSpaceshipsNumber(-moveOpponentAction.getSpaceshipsNumber());
-        System.out.println(moveOpponentAction.getSpaceshipsNumber());
         if (moveAction.getDestinationName().equals(moveOpponentAction.getDestinationName())) {
             int minimumSpaceshipsNumber = Math.min(moveAction.getSpaceshipsNumber(),
                     moveOpponentAction.getSpaceshipsNumber());
