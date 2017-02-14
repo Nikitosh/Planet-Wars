@@ -5,8 +5,16 @@ import burlap.mdp.core.state.State;
 import burlap.mdp.singleagent.model.RewardFunction;
 
 public class GameRewardFunction implements RewardFunction {
+    private static final double INFINITY = 1e9;
+
     @Override
     public double reward(State state, Action action, State newState) {
+        if (((GameState) newState).isLosing()) {
+            return -INFINITY;
+        }
+        if (((GameState) newState).isWinning()) {
+            return INFINITY;
+        }
         return getEvaluation((GameState) newState);
     }
 

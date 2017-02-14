@@ -23,7 +23,6 @@ public class GameModel implements FullStateModel {
 
     @Override
     public State sample(State state, Action action) {
-
         GameState gameState = (GameState) state.copy();
         gameState.touchNeutral();
         Agent newAgent = gameState.touchAgent();

@@ -7,6 +7,6 @@ public class GameTerminalFunction implements TerminalFunction {
     @Override
     public boolean isTerminal(State state) {
         GameState gameState = (GameState) state;
-        return ((Agent) gameState.object(GameState.OPPONENT_NAME)).getPlanets().isEmpty();
+        return gameState.isWinning() || gameState.isLosing();
     }
 }
