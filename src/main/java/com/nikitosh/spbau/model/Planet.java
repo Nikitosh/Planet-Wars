@@ -117,4 +117,9 @@ public class Planet implements ObjectInstance, State {
     public int hashCode() {
         return spaceshipsNumber * P + name.hashCode();
     }
+
+    @Override
+    public String toString() {
+        return name + " - " + spaceshipsNumber;
+    }
 }

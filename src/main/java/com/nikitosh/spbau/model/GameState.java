@@ -120,4 +120,17 @@ public class GameState implements OOState, HashableState {
         return source.getSpaceshipsNumber() >= action.getSpaceshipsNumber()
                 && currentAgent.getPlanets().indexOf(source) != -1;
     }
+
+    public boolean isLosing() {
+        return agent.getPlanets().isEmpty();
+    }
+
+    public boolean isWinning() {
+        return opponent.getPlanets().isEmpty();
+    }
+
+    @Override
+    public String toString() {
+        return neutral.toString() + "\n" + agent.toString() + "\n" + opponent.toString();
+    }
 }

@@ -1,11 +1,11 @@
 package com.nikitosh.spbau.model;
 
-import burlap.mdp.core.oo.state.ObjectInstance;
+import burlap.mdp.core.oo.state.*;
 import burlap.mdp.core.state.*;
-import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.collections.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public class Agent implements ObjectInstance, State {
     public static final String CLASS_NAME = "AGENT_CLASS";
@@ -86,5 +86,10 @@ public class Agent implements ObjectInstance, State {
     @Override
     public int hashCode() {
         return planets.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return name + ": " + planets.stream().map(Planet::toString).collect(Collectors.joining(", "));
     }
 }
