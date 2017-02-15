@@ -38,7 +38,7 @@ public final class World {
             String name1 = scanner.next();
             String name2 = scanner.next();
             world.edges.add(new MoveAction(name1, name2, 0));
-            for (int j = 0; j <= Planet.MAX_CAPACITY; j++) {
+            for (int j = 1; j <= Planet.MAX_CAPACITY; j++) {
                 world.actions.add(new MoveAction(name1, name2, j));
                 world.actions.add(new MoveAction(name2, name1, j));
             }

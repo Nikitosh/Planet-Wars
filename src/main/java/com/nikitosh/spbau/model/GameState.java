@@ -115,12 +115,6 @@ public class GameState implements OOState, HashableState {
         return opponent;
     }
 
-    public boolean isApplicable(Agent currentAgent, MoveAction action) {
-        Planet source = getPlanet(action.getSourceName());
-        return source.getSpaceshipsNumber() >= action.getSpaceshipsNumber()
-                && currentAgent.getPlanets().indexOf(source) != -1;
-    }
-
     public boolean isLosing() {
         return agent.getPlanets().isEmpty();
     }

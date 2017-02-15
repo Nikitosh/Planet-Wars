@@ -11,9 +11,11 @@ import java.util.*;
 
 public class GameDomainGenerator implements DomainGenerator {
     private List<Action> actions;
+    private Strategy strategy;
 
-    public GameDomainGenerator(List<Action> actions) {
+    public GameDomainGenerator(List<Action> actions, Strategy strategy) {
         this.actions = actions;
+        this.strategy = strategy;
     }
 
     @Override
@@ -25,13 +27,12 @@ public class GameDomainGenerator implements DomainGenerator {
             public List<Action> allApplicableActions(State s) {
                 GameState gameState = (GameState) s;
                 MoveAction moveAction = (MoveAction) action;
-                return gameState.isApplicable(gameState.getAgent(), moveAction)
+                return moveAction.isApplicable(gameState, gameState.getAgent())
                         ? Collections.singletonList(action) : Collections.emptyList();
             }
         }));
 
-        Strategy emptyStrategy = new EmptyStrategy();
-        domain.setModel(new FactoredModel(new GameModel(emptyStrategy),
+        domain.setModel(new FactoredModel(new GameModel(strategy),
                 new GameRewardFunction(),
                 new GameTerminalFunction()));
         return domain;

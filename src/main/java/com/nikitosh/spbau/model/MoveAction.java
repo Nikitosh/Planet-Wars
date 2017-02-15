@@ -1,6 +1,8 @@
 package com.nikitosh.spbau.model;
 
-import burlap.mdp.core.action.Action;
+import burlap.mdp.core.action.*;
+
+import java.util.stream.*;
 
 public class MoveAction implements Action {
     private String sourceName;
@@ -42,5 +44,20 @@ public class MoveAction implements Action {
     @Override
     public String toString() {
         return actionName();
+    }
+
+    public boolean isApplicable(GameState state, Agent currentAgent) {
+        Planet source = state.getPlanet(sourceName);
+        return source.getSpaceshipsNumber() >= spaceshipsNumber && currentAgent.getPlanets().indexOf(source) != -1;
+    }
+
+    public boolean isAttacking(GameState state, Agent currentAgent) {
+        return !currentAgent.getPlanets().stream().map(Planet::getName).collect(Collectors.toList())
+                .contains(destinationName)
+                && state.getPlanet(destinationName).getSpaceshipsNumber() < spaceshipsNumber;
+    }
+
+    public boolean isWaiting() {
+        return spaceshipsNumber == 0;
     }
 }
