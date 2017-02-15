@@ -8,6 +8,7 @@ import burlap.mdp.singleagent.model.statemodel.FullStateModel;
 import com.nikitosh.spbau.strategies.Strategy;
 
 import java.util.List;
+import java.util.stream.*;
 
 public class GameModel implements FullStateModel {
     private Strategy opponentStrategy;
@@ -18,16 +19,21 @@ public class GameModel implements FullStateModel {
 
     @Override
     public List<StateTransitionProb> stateTransitions(State state, Action action) {
-        return FullStateModel.Helper.deterministicTransition(this, state, action);
+        return opponentStrategy.getActions((GameState) state).stream()
+                .map(actionProbability -> new StateTransitionProb(sample(state, action, actionProbability.getAction()),
+                                actionProbability.getProbability())).collect(Collectors.toList());
     }
 
     @Override
     public State sample(State state, Action action) {
+        return sample(state, action, opponentStrategy.getAction((GameState) state));
+    }
+
+    private State sample(State state, Action action, Action opponentAction) {
         GameState gameState = (GameState) state.copy();
         gameState.touchNeutral();
         Agent newAgent = gameState.touchAgent();
         Agent newOpponent = gameState.touchOpponent();
-        Action opponentAction = opponentStrategy.getAction(gameState);
         processActions(newAgent, newOpponent, action, opponentAction, gameState);
         onTick(newAgent);
         onTick(newOpponent);
@@ -35,12 +41,12 @@ public class GameModel implements FullStateModel {
     }
 
     private void processActions(Agent agent, Agent opponent, Action action, Action opponentAction, GameState state) {
-        MoveAction moveAction = (MoveAction) action;
-        MoveAction moveOpponentAction = (MoveAction) opponentAction;
-        if (!state.isApplicable(agent, moveAction)) {
+        MoveAction moveAction = (MoveAction) action.copy();
+        MoveAction moveOpponentAction = (MoveAction) opponentAction.copy();
+        if (!moveAction.isApplicable(state, agent)) {
             throw new RuntimeException("Agent action " + moveAction + " can't be applied to current state");
         }
-        if (!state.isApplicable(opponent, moveOpponentAction)) {
+        if (!moveOpponentAction.isApplicable(state, opponent)) {
             throw new RuntimeException("Opponent action " + moveOpponentAction + " can't be applied to current state");
         }
         state.getPlanet(moveAction.getSourceName()).increaseSpaceshipsNumber(-moveAction.getSpaceshipsNumber());
