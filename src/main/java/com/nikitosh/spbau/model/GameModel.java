@@ -31,12 +31,15 @@ public class GameModel implements FullStateModel {
 
     private State sample(State state, Action action, Action opponentAction) {
         GameState gameState = (GameState) state.copy();
-        gameState.touchNeutral();
+        Agent newNeutral = gameState.touchNeutral();
         Agent newAgent = gameState.touchAgent();
         Agent newOpponent = gameState.touchOpponent();
         processActions(newAgent, newOpponent, action, opponentAction, gameState);
         onTick(newAgent);
         onTick(newOpponent);
+        newNeutral.rebuildPlanets();
+        newAgent.rebuildPlanets();
+        newOpponent.rebuildPlanets();
         return gameState;
     }
 
@@ -49,9 +52,13 @@ public class GameModel implements FullStateModel {
         if (!moveOpponentAction.isApplicable(state, opponent)) {
             throw new RuntimeException("Opponent action " + moveOpponentAction + " can't be applied to current state");
         }
-        state.getPlanet(moveAction.getSourceName()).increaseSpaceshipsNumber(-moveAction.getSpaceshipsNumber());
-        state.getPlanet(moveOpponentAction.getSourceName())
-                .increaseSpaceshipsNumber(-moveOpponentAction.getSpaceshipsNumber());
+        if (!moveAction.isWaiting()) {
+            state.getPlanet(moveAction.getSourceName()).increaseSpaceshipsNumber(-moveAction.getSpaceshipsNumber());
+        }
+        if (!moveOpponentAction.isWaiting()) {
+            state.getPlanet(moveOpponentAction.getSourceName())
+                    .increaseSpaceshipsNumber(-moveOpponentAction.getSpaceshipsNumber());
+        }
         if (moveAction.getDestinationName().equals(moveOpponentAction.getDestinationName())) {
             int minimumSpaceshipsNumber = Math.min(moveAction.getSpaceshipsNumber(),
                     moveOpponentAction.getSpaceshipsNumber());
@@ -63,9 +70,12 @@ public class GameModel implements FullStateModel {
     }
 
     private void processAction(Agent agent, MoveAction action, GameState state) {
+        if (action.isWaiting()) {
+            return;
+        }
         Planet destination = state.getPlanet(action.getDestinationName());
         int spaceshipsNumber = action.getSpaceshipsNumber();
-        if (agent.getPlanets().indexOf(destination) != -1) {
+        if (agent.getPlanets().contains(destination)) {
             destination.increaseSpaceshipsNumber(spaceshipsNumber);
             return;
         }
@@ -75,7 +85,7 @@ public class GameModel implements FullStateModel {
         }
         for (ObjectInstance objectInstance : state.objects()) {
             Agent anotherAgent = (Agent) objectInstance;
-            if (anotherAgent.getPlanets().indexOf(destination) != -1) {
+            if (anotherAgent.getPlanets().contains(destination)) {
                 anotherAgent.removePlanet(destination);
                 destination.setSpaceshipsNumber(spaceshipsNumber - destination.getSpaceshipsNumber());
                 agent.addPlanet(destination);

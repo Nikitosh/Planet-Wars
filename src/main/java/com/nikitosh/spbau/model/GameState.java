@@ -25,6 +25,25 @@ public class GameState implements OOState, HashableState {
     }
 
     @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof GameState)) {
+            return false;
+        }
+        GameState state = (GameState) obj;
+        return neutral.equals(state.neutral) && agent.equals(state.agent) && opponent.equals(state.opponent);
+    }
+
+    @Override
+    public int hashCode() {
+        return agent.hashCode() * P * P + opponent.hashCode() * P + neutral.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return neutral.toString() + "\n" + agent.toString() + "\n" + opponent.toString();
+    }
+
+    @Override
     public List<Object> variableKeys() {
         return OOStateUtilities.flatStateKeys(this);
     }
@@ -60,6 +79,11 @@ public class GameState implements OOState, HashableState {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public State s() {
+        return this;
+    }
+
     public Agent touchNeutral() {
         neutral = neutral.copy();
         return neutral;
@@ -84,25 +108,6 @@ public class GameState implements OOState, HashableState {
         return getAllPlanets().stream().filter(planet -> planet.name().equals(name)).findAny().orElse(null);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof GameState)) {
-            return false;
-        }
-        GameState state = (GameState) obj;
-        return neutral.equals(state.neutral) && agent.equals(state.agent) && opponent.equals(state.opponent);
-    }
-
-    @Override
-    public int hashCode() {
-        return agent.hashCode() * P * P + opponent.hashCode() * P + neutral.hashCode();
-    }
-
-    @Override
-    public State s() {
-        return this;
-    }
-
     public Agent getNeutral() {
         return neutral;
     }
@@ -121,10 +126,5 @@ public class GameState implements OOState, HashableState {
 
     public boolean isWinning() {
         return opponent.getPlanets().isEmpty();
-    }
-
-    @Override
-    public String toString() {
-        return neutral.toString() + "\n" + agent.toString() + "\n" + opponent.toString();
     }
 }

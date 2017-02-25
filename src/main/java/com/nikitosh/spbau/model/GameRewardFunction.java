@@ -3,9 +3,10 @@ package com.nikitosh.spbau.model;
 import burlap.mdp.core.action.Action;
 import burlap.mdp.core.state.State;
 import burlap.mdp.singleagent.model.RewardFunction;
+import com.nikitosh.spbau.*;
 
 public class GameRewardFunction implements RewardFunction {
-    private static final double INFINITY = 1e4;
+    private static final double INFINITY = 1e3;
 
     @Override
     public double reward(State state, Action action, State newState) {
@@ -15,7 +16,7 @@ public class GameRewardFunction implements RewardFunction {
         if (((GameState) newState).isWinning()) {
             return INFINITY;
         }
-        return getEvaluation((GameState) newState);
+        return getEvaluation((GameState) newState) - Settings.getInstance().getPlanetCapacity();
     }
 
     private double getEvaluation(GameState gameState) {
