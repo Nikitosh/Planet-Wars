@@ -30,4 +30,5 @@ public class GreedyAttackStrategy implements Strategy {
     public Action getAction(GameState state) {
         List<ActionProbability> applicableActions = getActions(state);
         return applicableActions.get(random.nextInt(applicableActions.size())).getAction();
-    }}
+    }
+}

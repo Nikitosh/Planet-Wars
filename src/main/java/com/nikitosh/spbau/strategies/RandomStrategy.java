@@ -17,8 +17,8 @@ public class RandomStrategy implements Strategy {
     @Override
     public List<ActionProbability> getActions(GameState state) {
         Agent opponent = (Agent) state.object(GameState.OPPONENT_NAME);
-        List<Action> applicableActions = actions.stream().filter(action -> ((MoveAction) action).isApplicable(state, opponent))
-                .collect(Collectors.toList());
+        List<Action> applicableActions = actions.stream()
+                .filter(action -> ((MoveAction) action).isApplicable(state, opponent)).collect(Collectors.toList());
         return applicableActions.stream().map(action -> new ActionProbability(action, 1. / applicableActions.size()))
                 .collect(Collectors.toList());
     }
