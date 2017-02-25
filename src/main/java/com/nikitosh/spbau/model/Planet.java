@@ -4,6 +4,7 @@ import burlap.mdp.core.oo.state.ObjectInstance;
 import burlap.mdp.core.state.State;
 import burlap.mdp.core.state.UnknownKeyException;
 import burlap.mdp.core.state.annotations.DeepCopyState;
+import com.nikitosh.spbau.*;
 
 import java.util.*;
 
@@ -11,26 +12,43 @@ import java.util.*;
 public class Planet implements ObjectInstance, State {
     private static final int P = 239017;
     public static final String CLASS_NAME = "PLANET_CLASS";
-    public static final int MAX_CAPACITY = 10;
-
-    private int x;
-    private int y;
-    private int spaceshipsNumber;
-    private String name;
 
     private static class Vars {
         private static final String X = "X";
         private static final String Y = "Y";
         private static final String SPACESHIPS_NUMBER = "SPACESHIPS_NUMBER";
     };
-
     private static final List<Object> KEYS = Arrays.<Object>asList(Vars.X, Vars.Y, Vars.SPACESHIPS_NUMBER);
+
+    private int x;
+    private int y;
+    private int spaceshipsNumber;
+    private String name;
 
     public Planet(int x, int y, int spaceshipsNumber, String name) {
         this.x = x;
         this.y = y;
         this.spaceshipsNumber = spaceshipsNumber;
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Planet)) {
+            return false;
+        }
+        Planet planet = (Planet) obj;
+        return spaceshipsNumber == planet.spaceshipsNumber && name.equals(planet.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return spaceshipsNumber * P + name.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return name + " - " + spaceshipsNumber;
     }
 
     @Override
@@ -101,25 +119,6 @@ public class Planet implements ObjectInstance, State {
     }
 
     public void normalize() {
-        spaceshipsNumber = Math.min(spaceshipsNumber, MAX_CAPACITY);
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Planet)) {
-            return false;
-        }
-        Planet planet = (Planet) obj;
-        return spaceshipsNumber == planet.spaceshipsNumber && name.equals(planet.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return spaceshipsNumber * P + name.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return name + " - " + spaceshipsNumber;
+        spaceshipsNumber = Math.min(spaceshipsNumber, Settings.getInstance().getPlanetCapacity());
     }
 }
