@@ -2,26 +2,46 @@ package com.nikitosh.spbau.model;
 
 import burlap.mdp.core.oo.state.*;
 import burlap.mdp.core.state.*;
+import burlap.mdp.core.state.annotations.*;
 import org.apache.commons.collections.*;
 
 import java.util.*;
 import java.util.stream.*;
 
+@DeepCopyState
 public class Agent implements ObjectInstance, State {
     public static final String CLASS_NAME = "AGENT_CLASS";
-
-    private List<Planet> planets;
-    private String name;
 
     private static class Vars {
         private static final String PLANETS = "PLANETS";
     };
-
     private static final List<Object> KEYS = Arrays.<Object>asList(Vars.PLANETS);
 
-    public Agent(List<Planet> planets, String name) {
+    private Set<Planet> planets;
+    private String name;
+
+    public Agent(Set<Planet> planets, String name) {
         this.planets = planets;
         this.name = name;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (!(obj instanceof Agent)) {
+            return false;
+        }
+        Agent agent = (Agent) obj;
+        return CollectionUtils.isEqualCollection(planets, agent.planets);
+    }
+
+    @Override
+    public int hashCode() {
+        return planets.hashCode();
+    }
+
+    @Override
+    public String toString() {
+        return name + ": " + planets.stream().map(Planet::toString).collect(Collectors.joining(", "));
     }
 
     @Override
@@ -36,7 +56,7 @@ public class Agent implements ObjectInstance, State {
 
     @Override
     public Agent copyWithName(String newName) {
-        return new Agent(planets.stream().map(Planet::copy).collect(Collectors.toList()), newName);
+        return new Agent(planets.stream().map(Planet::copy).collect(Collectors.toSet()), newName);
     }
 
     @Override
@@ -57,7 +77,7 @@ public class Agent implements ObjectInstance, State {
         return copyWithName(name);
     }
 
-    public List<Planet> getPlanets() {
+    public Set<Planet> getPlanets() {
         return planets;
     }
 
@@ -74,22 +94,7 @@ public class Agent implements ObjectInstance, State {
         planets.add(planet);
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Agent)) {
-            return false;
-        }
-        Agent agent = (Agent) obj;
-        return CollectionUtils.isEqualCollection(planets, agent.planets);
-    }
-
-    @Override
-    public int hashCode() {
-        return planets.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return name + ": " + planets.stream().map(Planet::toString).collect(Collectors.joining(", "));
+    public void rebuildPlanets() {
+        planets = planets.stream().collect(Collectors.toSet());
     }
 }

@@ -2,18 +2,19 @@ package com.nikitosh.spbau.model;
 
 import burlap.mdp.core.action.Action;
 import burlap.mdp.core.state.State;
+import com.nikitosh.spbau.*;
 
 import java.io.*;
 import java.util.*;
 
 public final class World {
-    private List<List<Planet>> planets = new ArrayList<>();
+    private List<Set<Planet>> planets = new ArrayList<>();
     private List<Action> actions = new ArrayList<>();
     private List<Action> edges = new ArrayList<>();
 
     private World() {
         for (int i = 0; i < GameState.PLAYERS_NUMBER + 1; i++) {
-            planets.add(new ArrayList<>());
+            planets.add(new HashSet<>());
         }
     }
 
@@ -38,7 +39,7 @@ public final class World {
             String name1 = scanner.next();
             String name2 = scanner.next();
             world.edges.add(new MoveAction(name1, name2, 0));
-            for (int j = 1; j <= Planet.MAX_CAPACITY; j++) {
+            for (int j = 1; j <= Settings.getInstance().getPlanetCapacity(); j++) {
                 world.actions.add(new MoveAction(name1, name2, j));
                 world.actions.add(new MoveAction(name2, name1, j));
             }
