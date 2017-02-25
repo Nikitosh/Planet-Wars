@@ -1,5 +1,7 @@
 package com.nikitosh.spbau.model;
 
+//CheckStyle:OFF: MagicNumber
+
 import com.nikitosh.spbau.*;
 import com.nikitosh.spbau.strategies.*;
 import org.junit.*;
@@ -7,35 +9,33 @@ import org.junit.*;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
-//CheckStyle:OFF: MagicNumber
-
-public class GameModelTest {
+public class GameModelTest extends RulesBase {
 
     @Test
     public void testSampleUnionAction() {
-        GameState state = generateState();
-        Agent neutral = state.getNeutral();
-        Agent agent = state.getAgent();
-        Agent opponent = state.getOpponent();
+        Agent neutral = TestUtilities.generateAgent(GameState.NEUTRAL_NAME, Arrays.asList(2, 3),
+                Arrays.asList("Planet1", "Planet2"));
+        Agent agent = TestUtilities.generateAgent(GameState.AGENT_NAME, Arrays.asList(5, 6),
+                Arrays.asList("Planet3", "Planet4"));
+        Agent opponent = TestUtilities.generateAgent(GameState.OPPONENT_NAME, Arrays.asList(9, 1),
+                Arrays.asList("Planet5", "Planet6"));
+        GameState state = new GameState(neutral, agent, opponent);
         Strategy strategy = new EmptyStrategy();
-        MoveAction action = new MoveAction(agent.getPlanets().get(0).getName(),
-                agent.getPlanets().get(1).getName(), 3);
+        MoveAction action = new MoveAction("Planet3", "Planet4", 3);
 
-        Agent expectedAgent = agent.copy();
-        expectedAgent.getPlanets().get(0).setSpaceshipsNumber(3);
-        expectedAgent.getPlanets().get(1).setSpaceshipsNumber(10);
+        Agent expectedAgent = TestUtilities.generateAgent(GameState.AGENT_NAME, Arrays.asList(3, 10),
+                Arrays.asList("Planet3", "Planet4"));
 
-        Agent expectedOpponent = opponent.copy();
-        expectedOpponent.getPlanets().get(0).setSpaceshipsNumber(10);
-        expectedOpponent.getPlanets().get(1).setSpaceshipsNumber(2);
+        Agent expectedOpponent = TestUtilities.generateAgent(GameState.OPPONENT_NAME, Arrays.asList(10, 2),
+                Arrays.asList("Planet5", "Planet6"));
 
         GameState expectedState = new GameState(neutral, expectedAgent, expectedOpponent);
+
         assertEquals(expectedState, new GameModel(strategy).sample(state, action));
     }
 
+    /*
     @Test
     public void testSampleAttackAction() {
         GameState state = generateState();
@@ -114,15 +114,7 @@ public class GameModelTest {
         GameState expectedState = new GameState(expectedNeutral, expectedAgent, expectedOpponent);
         assertEquals(expectedState, new GameModel(strategy).sample(state, action));
     }
-
-
-    private GameState generateState() {
-        Agent neutral = TestUtilities.generateAgent(GameState.NEUTRAL_NAME, Arrays.asList(2, 3));
-        Agent agent = TestUtilities.generateAgent(GameState.AGENT_NAME, Arrays.asList(5, 6));
-        Agent opponent = TestUtilities.generateAgent(GameState.OPPONENT_NAME, Arrays.asList(9, 1));
-        return new GameState(neutral, agent, opponent);
-    }
-
+    */
 }
 
 //CheckStyle:ON: MagicNumber

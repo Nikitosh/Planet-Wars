@@ -1,21 +1,23 @@
 package com.nikitosh.spbau.model;
 
+//CheckStyle:OFF: MagicNumber
+
 import org.junit.*;
 import org.junit.rules.*;
 
 import java.io.*;
 import java.util.*;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-//CheckStyle:OFF: MagicNumber
+public class WorldTest extends RulesBase {
 
-public class WorldTest {
     @Rule
     public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Test
     public void testReadFromFile() throws IOException {
+        System.out.println(temporaryFolder.getRoot().getPath());
         File temporaryFile = temporaryFolder.newFile("map.txt");
         PrintWriter printWriter = new PrintWriter(temporaryFile);
 
@@ -47,12 +49,14 @@ public class WorldTest {
         GameState state = (GameState) world.getState();
 
         GameState expectedState = new GameState(
-                new Agent(Arrays.asList(new Planet(200, 100, 6, "Planet2")), GameState.NEUTRAL_NAME),
-                new Agent(Arrays.asList(
+                new Agent(new HashSet<>(Arrays.asList(new Planet(200, 100, 6, "Planet2"))),
+                        GameState.NEUTRAL_NAME),
+                new Agent(new HashSet<>(Arrays.asList(
                         new Planet(100, 100, 5, "Planet1"),
-                        new Planet(300, 100, 7, "Planet3")),
+                        new Planet(300, 100, 7, "Planet3"))),
                         GameState.AGENT_NAME),
-                new Agent(Arrays.asList(new Planet(400, 100, 8, "Planet4")), GameState.OPPONENT_NAME)
+                new Agent(new HashSet<>(Arrays.asList(new Planet(400, 100, 8, "Planet4"))),
+                        GameState.OPPONENT_NAME)
                 );
         assertEquals(expectedState, state);
     }

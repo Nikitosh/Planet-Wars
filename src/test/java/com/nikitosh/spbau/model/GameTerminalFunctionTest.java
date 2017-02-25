@@ -9,7 +9,7 @@ import static org.junit.Assert.assertEquals;
 
 //CheckStyle:OFF: MagicNumber
 
-public class GameTerminalFunctionTest {
+public class GameTerminalFunctionTest extends RulesBase {
 
     @Test
     public void testIsTerminalFalse() {
