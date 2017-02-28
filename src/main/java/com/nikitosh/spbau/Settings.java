@@ -4,7 +4,9 @@ package com.nikitosh.spbau;
 
 public final class Settings {
     private static Settings instance;
-    private int planetCapacity = 4;
+    private int bucketSize = 7;
+    private int bucketsNumber = 3;
+    private int planetCapacity = bucketSize * bucketsNumber - 1;
 
     private Settings() {}
 
@@ -21,6 +23,14 @@ public final class Settings {
 
     public void setPlanetCapacity(int planetCapacity) {
         this.planetCapacity = planetCapacity;
+    }
+
+    public int getBucketSize() {
+        return bucketSize;
+    }
+
+    public int getBucketsNumber() {
+        return bucketsNumber;
     }
 }
 
