@@ -21,7 +21,7 @@ public class GameRewardFunctionTest extends RulesBase {
                         Arrays.asList("Planet1", "Planet2", "Planet3", "Planet4")),
                 TestUtilities.generateAgent(GameState.OPPONENT_NAME, Arrays.asList(1, 3)));
         State newState = new GameModel(new EmptyStrategy()).sample(oldState, MoveAction.WAITING_ACTION);
-        assertEquals(4 + 10 + 9 + 2 - (2 + 4) - Settings.getInstance().getPlanetCapacity(),
+        assertEquals(4 + 10 + 9 + 2 - (2 + 4),
                 new GameRewardFunction().reward(oldState, MoveAction.WAITING_ACTION, newState), DELTA);
     }
 

@@ -2,6 +2,7 @@ package com.nikitosh.spbau.model;
 
 //CheckStyle:OFF: MagicNumber
 
+import com.nikitosh.spbau.*;
 import org.junit.*;
 import org.junit.rules.*;
 
@@ -21,11 +22,12 @@ public class WorldTest extends RulesBase {
         File temporaryFile = temporaryFolder.newFile("map.txt");
         PrintWriter printWriter = new PrintWriter(temporaryFile);
 
+        int capacity = Settings.getInstance().getPlanetCapacity();
         List<Planet> planets = Arrays.asList(
-                new Planet(100, 100, 5, "Planet1"),
-                new Planet(200, 100, 6, "Planet2"),
-                new Planet(300, 100, 7, "Planet3"),
-                new Planet(400, 100, 8, "Planet4")
+                new Planet(100, 100, capacity, "Planet1"),
+                new Planet(200, 100, capacity, "Planet2"),
+                new Planet(300, 100, capacity, "Planet3"),
+                new Planet(400, 100, capacity, "Planet4")
                 );
         List<Integer> owners = Arrays.asList(1, 0, 1, 2);
 
@@ -49,21 +51,20 @@ public class WorldTest extends RulesBase {
         GameState state = (GameState) world.getState();
 
         GameState expectedState = new GameState(
-                new Agent(new HashSet<>(Arrays.asList(new Planet(200, 100, 6, "Planet2"))),
+                new Agent(new HashSet<>(Arrays.asList(new Planet(200, 100, capacity, "Planet2"))),
                         GameState.NEUTRAL_NAME),
                 new Agent(new HashSet<>(Arrays.asList(
-                        new Planet(100, 100, 5, "Planet1"),
-                        new Planet(300, 100, 7, "Planet3"))),
+                        new Planet(100, 100, capacity, "Planet1"),
+                        new Planet(300, 100, capacity, "Planet3"))),
                         GameState.AGENT_NAME),
-                new Agent(new HashSet<>(Arrays.asList(new Planet(400, 100, 8, "Planet4"))),
+                new Agent(new HashSet<>(Arrays.asList(new Planet(400, 100, capacity, "Planet4"))),
                         GameState.OPPONENT_NAME)
                 );
         assertEquals(expectedState, state);
     }
 
     private void printPlanet(PrintWriter printWriter, Planet planet, int owner) {
-        printWriter.println(planet.getName() + " " + planet.getX() + " " + planet.getY() + " "
-                + planet.getSpaceshipsNumber() + " " + owner);
+        printWriter.println(planet.getName() + " " + planet.getX() + " " + planet.getY() + " " + owner);
     }
 
     private void printEdge(PrintWriter printWriter, String sourcePlanetName, String destinationPlanetName) {
