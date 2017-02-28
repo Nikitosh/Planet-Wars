@@ -1,11 +1,11 @@
 package com.nikitosh.spbau.model;
 
 import burlap.mdp.core.oo.state.*;
-import burlap.mdp.core.state.State;
-import burlap.statehashing.HashableState;
+import burlap.mdp.core.state.*;
+import burlap.statehashing.*;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.stream.*;
 
 public class GameState implements OOState, HashableState {
     private static final int P = 239017;

@@ -38,12 +38,13 @@ public class Planet implements ObjectInstance, State {
             return false;
         }
         Planet planet = (Planet) obj;
-        return spaceshipsNumber == planet.spaceshipsNumber && name.equals(planet.name);
+        int bucketSize = Settings.getInstance().getBucketSize();
+        return name.equals(planet.name) && spaceshipsNumber / bucketSize == planet.spaceshipsNumber / bucketSize;
     }
 
     @Override
     public int hashCode() {
-        return spaceshipsNumber * P + name.hashCode();
+        return (spaceshipsNumber / Settings.getInstance().getBucketSize()) * P + name.hashCode();
     }
 
     @Override
