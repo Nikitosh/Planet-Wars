@@ -9,6 +9,6 @@ public final class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
         new LearnedAgentVisualizer().run();
-        new PlotsDrawer().run();
+        //new PlotsDrawer().run();
     }
 }
