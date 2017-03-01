@@ -1,0 +1,11 @@
+4
+Earth    200 200 1
+Saturn   400 100 0
+Jupiter  400 300 0
+Mars     600 200 2
+5
+Earth   Saturn
+Earth   Jupiter
+Saturn  Jupiter
+Saturn  Mars
+Jupiter Mars
